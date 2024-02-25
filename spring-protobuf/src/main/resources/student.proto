@@ -1,15 +1,9 @@
 syntax = "proto3";
 
-package baeldung;
+package com.baeldung.protobuf;
 
 option java_package = "com.baeldung.protobuf";
-option java_outer_classname = "BaeldungTraining";
-
-message Course {
-	int32 id = 1;
-	string course_name = 2;
-	repeated Student student = 3;
-}
+option java_outer_classname = "StudentProtos";
 
 message Student {
 	int32 id = 1;

@@ -5,16 +5,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.baeldung.protobuf.BaeldungTraining.Course;
+import com.baeldung.protobuf.StudentProtos.Student;
 
 @RestController
-public class CourseController {
+public class StudentController {
 
     @Autowired
-    CourseRepository courseRepo;
+    private StudentRepository studentRepository;
 
-    @RequestMapping("/courses/{id}")
-    Course customer(@PathVariable Integer id) {
-        return courseRepo.getCourse(id);
+    @RequestMapping("/students/{id}")
+    Student student(@PathVariable Integer id) {
+        return studentRepository.getStudent(id);
     }
 }
