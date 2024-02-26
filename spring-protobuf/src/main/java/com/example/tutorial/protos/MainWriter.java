@@ -1,6 +1,12 @@
 package com.example.tutorial.protos;
 
+import com.google.protobuf.util.JsonFormat;
+
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainWriter {
 
@@ -48,21 +54,71 @@ public class MainWriter {
     }
     public static void main(String[] args) throws IOException {
 
-        AddressBook.Builder addressBook = AddressBook.newBuilder();
+        /*AddressBook.Builder addressBook = AddressBook.newBuilder();
 
         // Read the existing address book.
         try {
             addressBook.mergeFrom(new FileInputStream("file1"));
         } catch (IOException e) {
             //System.out.println(args[0] + ": File not found.  Creating a new file.");
-        }
+        }*/
 
         // Add an address.
-        addressBook.addPeople(PromptForAddress(new BufferedReader(new InputStreamReader(System.in)), System.out));
+        //addressBook.addPeople(PromptForAddress(new BufferedReader(new InputStreamReader(System.in)), System.out));
+        Person p = Person.newBuilder()
+                        .addAllPhones(List.of(Person.PhoneNumber.newBuilder()
+                                        .setType(Person.PhoneType.PHONE_TYPE_HOME)
+                                        .setNumber("1232342342")
+                                .build()))
+                        .setEmail("test@gmail.com")
+                        .setId(1)
+                        .setName("Vijay")
+                .build();
 
         // Write the new address book back to disk.
-        FileOutputStream output = new FileOutputStream("file1");
-        addressBook.build().writeTo(output);
-        output.close();
+       // FileOutputStream output = new FileOutputStream("file1");
+       // addressBook.build().writeTo(output);
+        //output.close();
+        System.out.println(JsonFormat.printer().print(p));
+        System.out.println(Arrays.toString(p.toByteArray()));
+
+        StringBuilder hexString = new StringBuilder();
+        List<String> hexas = new ArrayList<>();
+        for (byte b : p.toByteArray()) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) {
+                hexas.add("0"+hex);
+                continue;
+            }
+            hexas.add(hex);
+        }
+        System.out.println(hexas);
+        System.out.println(hexas.size());
+    }
+
+    public static String protobufToString(MessageProto.Test1 message)  {
+        // Serialize the protobuf message to bytes
+        byte[] bytes = message.toByteArray();
+
+        // Convert bytes to a UTF-8 string
+        String utf8String = new String(bytes, StandardCharsets.UTF_8);
+
+        return utf8String;
+    }
+
+    public static void main1(String[] args) throws IOException {
+
+        MessageProto.Test1 test1 = MessageProto.Test1.newBuilder()
+                .setA(150)
+                .build();
+
+        // Write the new address book back to disk.
+        /*FileOutputStream output = new FileOutputStream("file2");
+        test1.writeTo(output);
+        output.close();*/
+
+        //String utf8String = protobufToString(test1);
+        System.out.println(Arrays.toString(test1.toByteArray()));
+        System.out.println(JsonFormat.printer().print(test1));
     }
 }
